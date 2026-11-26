@@ -11,7 +11,9 @@ import { Intro } from './intro'
 import { PRESET_THEMES, THEMES, getTheme } from './theme'
 import './styles.css'
 
-const lite=new URLSearchParams(location.search).has('lite')
+const params=new URLSearchParams(location.search)
+const isMobile=matchMedia('(max-width: 820px)').matches||/Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent)
+const lite=params.has('lite')||(isMobile&&!params.has('full'))
 const shareMode=typeof window!=='undefined' && Boolean(window.__AURORA_SHARE__)
 const initialSettings={
   particles:lite?1500:6000,boxes:lite?80:220,bells:lite?80:220,fireworks:7,
