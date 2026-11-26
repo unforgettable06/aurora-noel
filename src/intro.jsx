@@ -84,9 +84,7 @@ export function Intro({ name, blocked, onUnlock, onReveal, onFinish, theme, them
     const context = canvas.getContext('2d')
     const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches
     const rng = makeRng(15012026)
-    const mobile = matchMedia('(max-width: 820px)').matches || /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent)
-    const density = mobile ? .5 : 1
-    let width = 0, height = 0, dpr = 1, frame = 0, start = performance.now(), lastFrame = -1
+    let width = 0, height = 0, dpr = 1, frame = 0, start = performance.now()
     let geom = null, spiral = [], tiers = [], ribs = [], lights = [], burst = []
     let ring = [], dust = [], aurora = [], fireworks = [], ornaments = [], baseRing = []
     let fuzz = [], bokeh = [], snowflakes = [], forest = []
@@ -108,7 +106,7 @@ export function Intro({ name, blocked, onUnlock, onReveal, onFinish, theme, them
 
       spiral = []
       const turns = 13
-      const count = Math.round(2400 * density)
+      const count = 2400
       for (let i = 0; i <= count; i++) {
         const t = i / count
         const angle = t * TAU * turns + .55
@@ -136,7 +134,7 @@ export function Intro({ name, blocked, onUnlock, onReveal, onFinish, theme, them
         }
       })
 
-      lights = Array.from({ length: Math.round(380 * density) }, () => {
+      lights = Array.from({ length: 380 }, () => {
         const onSpiral = rng() < .68
         let t, x, y, z
         if (onSpiral) {
@@ -185,7 +183,7 @@ export function Intro({ name, blocked, onUnlock, onReveal, onFinish, theme, them
         }
       })
 
-      ring = Array.from({ length: Math.round(230 * density) }, () => {
+      ring = Array.from({ length: 230 }, () => {
         const angle = rng() * TAU
         const factor = rng() > .55 ? 1.05 + rng() * .4 : .8 + rng() * .24
         return {
@@ -196,7 +194,7 @@ export function Intro({ name, blocked, onUnlock, onReveal, onFinish, theme, them
         }
       })
 
-      ornaments = Array.from({ length: Math.round(34 * density) }, () => {
+      ornaments = Array.from({ length: 34 }, () => {
         const t = .1 + rng() * .78
         const angle = rng() * TAU
         const r = radius * (1 - t) * .98
@@ -213,7 +211,7 @@ export function Intro({ name, blocked, onUnlock, onReveal, onFinish, theme, them
         }
       })
 
-      baseRing = Array.from({ length: Math.round(90 * density) }, () => {
+      baseRing = Array.from({ length: 90 }, () => {
         const angle = rng() * TAU
         return {
           angle,
@@ -224,7 +222,7 @@ export function Intro({ name, blocked, onUnlock, onReveal, onFinish, theme, them
         }
       })
 
-      dust = Array.from({ length: Math.round(90 * density) }, () => ({
+      dust = Array.from({ length: 90 }, () => ({
         x: rng() * width,
         y: rng() * height * .62,
         size: .4 + Math.pow(rng(), 4) * 2,
@@ -263,7 +261,7 @@ export function Intro({ name, blocked, onUnlock, onReveal, onFinish, theme, them
       }))
 
       // 参考动画的体积星尘：大量微小点围绕锥面，前后深度不同
-      fuzz = Array.from({ length: Math.round(2800 * density) }, () => {
+      fuzz = Array.from({ length: 2800 }, () => {
         const t = Math.pow(rng(), .72)
         const r = radius * (1 - t) * Math.pow(rng(), .5)
         const angle = rng() * TAU
@@ -279,7 +277,7 @@ export function Intro({ name, blocked, onUnlock, onReveal, onFinish, theme, them
       })
 
       // 金/冰色散景球，对应参考动画里漂浮的暖色光斑
-      bokeh = Array.from({ length: Math.round(48 * density) }, () => {
+      bokeh = Array.from({ length: 48 }, () => {
         const t = .06 + Math.pow(rng(), 1.35) * .8
         const r = radius * (1 - t) * (.92 + rng() * .16)
         const angle = rng() * TAU
@@ -296,7 +294,7 @@ export function Intro({ name, blocked, onUnlock, onReveal, onFinish, theme, them
 
       // 开场光点：和树螺旋同一条路径，圈数少 1 圈，一路画到树尖
       seed = []
-      const seedCount = Math.round(1200 * density)
+      const seedCount = 1200
       const seedTurns = 12
       for (let i = 0; i <= seedCount; i++) {
         const u = i / seedCount
@@ -313,7 +311,7 @@ export function Intro({ name, blocked, onUnlock, onReveal, onFinish, theme, them
       }
 
       // 爆炸后保留的圆环；粒子向环外扩散，但环本身一直在
-      explosionRing = Array.from({ length: Math.round(380 * density) }, () => ({
+      explosionRing = Array.from({ length: 380 }, () => ({
         angle: rng() * TAU,
         factor: .96 + rng() * .08,
         size: .75 + Math.pow(rng(), 2) * 2.2,
@@ -321,7 +319,7 @@ export function Intro({ name, blocked, onUnlock, onReveal, onFinish, theme, them
       }))
 
       // 爆炸后的三维环层：粒子固定在树尖高度，在同一水平面内向外扩散到全屏，再散成树
-      ringLayer = Array.from({ length: Math.round(3400 * density) }, (_, i) => {
+      ringLayer = Array.from({ length: 3400 }, (_, i) => {
         const angle = rng() * TAU
         const startR = radius * (.9 + rng() * .55)
         const size = .7 + Math.pow(rng(), 2) * 2.4
@@ -339,7 +337,7 @@ export function Intro({ name, blocked, onUnlock, onReveal, onFinish, theme, them
       })
 
       // 真正的三维星空：镜头转动时有前后视差
-      stars3d = Array.from({ length: Math.round(420 * density) }, () => ({
+      stars3d = Array.from({ length: 420 }, () => ({
         x: (rng() - .5) * width * 2.3,
         y: height * (.06 + rng() * .72),
         z: (rng() - .5) * treeH * 3.4,
@@ -350,7 +348,7 @@ export function Intro({ name, blocked, onUnlock, onReveal, onFinish, theme, them
 
       // 种在三维空间里的远景松林，不再是一张屏幕贴图
       // 多层视差松林：镜头 yaw/pitch 变化时远近两层移动量不同，形成 3D 背景
-      forest3d = Array.from({ length: Math.round(72 * density) }, () => {
+      forest3d = Array.from({ length: 72 }, () => {
         const h = height * (.04 + rng() * .085)
         return {
           x: rng() * width,
@@ -363,7 +361,7 @@ export function Intro({ name, blocked, onUnlock, onReveal, onFinish, theme, them
         }
       })
 
-      snowflakes = Array.from({ length: Math.round(72 * density) }, () => ({
+      snowflakes = Array.from({ length: 72 }, () => ({
         x: rng() * width,
         y: rng() * height * .78,
         size: .8 + rng() * 2.2,
@@ -499,7 +497,7 @@ export function Intro({ name, blocked, onUnlock, onReveal, onFinish, theme, them
           fw.active = true
           fw.age = 0
           fw.strands = []
-          const count = mobile ? 36 : 64
+          const count = 64
           for (let i = 0; i < count; i++) {
             const angle = i / count * TAU + fw.seed * .08
             const speed = 62 + 22 * (.5 + .5 * Math.sin(i * 2.3 + fw.seed))
@@ -513,7 +511,7 @@ export function Intro({ name, blocked, onUnlock, onReveal, onFinish, theme, them
               color: i % 5 === 0 ? '#fff4d8' : i % 3 === 0 ? theme.primary : fw.color,
               width: .55 + (i % 6) * .1,
               seed: fw.seed + i * .47,
-              hist: Array.from({ length: mobile ? 14 : 26 }, () => ({ x: px, y: py })),
+              hist: Array.from({ length: 26 }, () => ({ x: px, y: py })),
             })
           }
         }
@@ -976,7 +974,7 @@ export function Intro({ name, blocked, onUnlock, onReveal, onFinish, theme, them
       path(); context.stroke()
 
       // 沿螺旋线铺一圈发光珠子，让光带看起来是一条真正的灯链
-      for (let i = 0; i <= maxIndex; i += (mobile ? 22 : 11)) {
+      for (let i = 0; i <= maxIndex; i += 11) {
         const point = project(spiral[i].x, spiral[i].y, spiral[i].z)
         const near = clamp(.95 - point.depth * .055, .22, 1)
         const size = (1.2 + spiral[i].depth * 1.4) * (0.8 + near * 1.4)
@@ -1450,29 +1448,24 @@ export function Intro({ name, blocked, onUnlock, onReveal, onFinish, theme, them
         drag.velPitch *= .93
       }
       const time = reduced ? 10.2 : (now - start) / 1000
-      const frameIndex = Math.floor(time * 30)
-      if (reduced || frameIndex !== lastFrame) {
-        lastFrame = frameIndex
-        draw(time)
-      }
+      draw(time)
       if (!reduced) frame = requestAnimationFrame(loop)
     }
 
     function resize() {
       width = canvas.clientWidth
       height = canvas.clientHeight
-      dpr = Math.min(mobile ? 1.25 : 2, window.devicePixelRatio || 1)
+      dpr = Math.min(2, window.devicePixelRatio || 1)
       canvas.width = Math.max(1, Math.round(width * dpr))
       canvas.height = Math.max(1, Math.round(height * dpr))
       context.setTransform(dpr, 0, 0, dpr, 0, 0)
       bloomA = document.createElement('canvas')
-      bloomA.width = Math.max(1, Math.round(canvas.width / (mobile ? 6 : 4)))
-      bloomA.height = Math.max(1, Math.round(canvas.height / (mobile ? 6 : 4)))
+      bloomA.width = Math.max(1, Math.round(canvas.width / 4))
+      bloomA.height = Math.max(1, Math.round(canvas.height / 4))
       bloomB = document.createElement('canvas')
-      bloomB.width = Math.max(1, Math.round(canvas.width / (mobile ? 12 : 8)))
-      bloomB.height = Math.max(1, Math.round(canvas.height / (mobile ? 12 : 8)))
+      bloomB.width = Math.max(1, Math.round(canvas.width / 8))
+      bloomB.height = Math.max(1, Math.round(canvas.height / 8))
       buildGeometry()
-      lastFrame = -1
       start = performance.now()
       if (reduced) {
         draw(10.2)
