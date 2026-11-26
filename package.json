@@ -1,0 +1,24 @@
+{
+  "name": "aurora-noel",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "build": "node scripts/copy-hands.mjs && vite build",
+    "build:share": "node scripts/build-share.mjs",
+    "preview": "vite preview --host 127.0.0.1",
+    "postinstall": "node scripts/copy-hands.mjs"
+  },
+  "dependencies": {
+    "@mediapipe/hands": "0.4.1675469240",
+    "lucide-react": "^0.556.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "three": "0.181.2"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^5.1.1",
+    "vite": "^6.4.1"
+  }
+}

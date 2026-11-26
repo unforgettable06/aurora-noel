@@ -1,0 +1,13 @@
+node_modules/
+dist/
+dist-single/
+public/mediapipe/
+圣诞树.html
+*.zip
+*.local
+.DS_Store
+Thumbs.db
+
+.build-tmp/
+_srcpack/
+gh-pages-stage/
